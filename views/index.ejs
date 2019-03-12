@@ -5,11 +5,78 @@
     <link rel="stylesheet" href="/stylesheets/style.css" />
   </head>
   <body>
-    <header><span class="title">Bryant's Tic-Tac-Toe with Socket.io</span><button class="btn clear">clear</button></header>
-    <main id="gameboard">
+    <nav>
+        <img src="resources/imgs/GAlogo.png" id="logo" alt="General Assembly Logo" title="General Assembly Logo">
+        <h1>Bryant Cabrera</h1>
+        <ul>
+            <li><a href="#instructions" rel="modal:open">Instructions</a>
+                <div id="instructions" class="modal">
+                    <p><h4>Welcome to Bryant's Tic-Tac-Toe, a.k.a. Jim-vs-Jim.</h4><br>
+                    <b>General Assembly</b> is opening up a new campus. <b>Jim1</b> & <b>Jim2</b> are trying to make life for themselves as convenient as possible by nabbing <u>3 consecutive rooms</u> that are either in the same row, column, or diagonal.  Whoever gets that combination wins the game, otherwise it's a tie!  Best of luck teachers!</p>
+                    <a href="#" rel="modal:close">Close</a>
+                </div>
+            </li>
+            <li><a href="#gameboard">Play</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+    <header>
+        <h1>Bryant's Tic-Tac-Toe with Socket.io</h1>
+    </header>
     
+    <main>
+        <div id="player1">
+            <img src="resources/imgs/player1.png" id="player1-img">
+        </div>
+        <div id="player2">
+            <img src="resources/imgs/player2.png" id="player2-img">
+        </div>
+        <table id="gameboard">
+                <tr>
+                    <td id="0" class="square">1</td>
+                    <td id="1" class="square">2</td>
+                    <td id="2" class="square">3</td>
+                </tr>
+                <tr>
+                    <td id="3" class="square">4</td>
+                    <td id="4" class="square">5</td>
+                    <td id="5" class="square">6</td>
+                </tr>
+                <tr>
+                    <td id="6" class="square">7</td>
+                    <td id="7" class="square">8</td>
+                    <td id="8" class="square">9</td>
+                </tr>
+        </table>
     </main>
-    <footer><ul id="players"></ul></footer>
+    <section>
+        <h3 id="turn">
+            Please click "New Game" below to start.
+        </h3>
+        <a href="#" id="new-game" class="btn">New Game</a>
+    </section>
+    <!-- <aside id="player-2-info">
+        <h3>Player 2</h3>
+    </aside> -->
+    <!--<ul id="players"></ul>-->
+    <footer id="contact">
+        <div class="row">
+            <ul class="footer-nav">
+                <li><a href="www.bryantcabrera.com" target="blank">About Me</a></li>
+                <li><a href="https://www.linkedin.com/in/bryantcabrera/" target="blank">LinkedIn</a></li>
+                <li><a href="https://github.com/BryantCabrera" target="blank">GitHub</a></li>
+            </ul>
+        
+
+            <ul class="social-links">
+                <li><a href="https://www.facebook.com/bryantcabrera" target="blank"><i class="ion-social-facebook"></i></a></li>
+                <li><a href="https://twitter.com/bryantcabrera" target="blank"><i class="ion-social-twitter"></i></a></li>
+                <li><a href="plus.google.com/+BryantCabrera" target="blank"><i class="ion-social-googleplus"></i></a></li>
+                <li><a href="https://www.instagram.com/bryantcabrera/" target="blank"><i class="ion-social-instagram"></i></a></li>
+            </ul>    
+        </div>   
+    </footer>
+
   </body>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/javascripts/app.js"></script>
