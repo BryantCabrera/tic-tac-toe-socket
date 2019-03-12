@@ -39,14 +39,18 @@
                 <li>Player 2: Enter another username and the room id that is displayed on first window.</li>
                 <li>Click on join game. </li>
             </ol>
-            <h4>Create a new Game</h4>
+            <div class="create-room__message"></div>
+            <div id="create-room">
+                <h4 class="create-room__header">Create a new Game</h4>
                 <input type="text" name="name" id="nameNew" placeholder="Enter your name" required>
                 <button id="new">New Game</button>
-            <br><br>
-            <h4>Join an existing game</h4>
+            </div>
+            <div id="join-room">
+                <h4>Join an existing game</h4>
                 <input type="text" name="name" id="nameJoin" placeholder="Enter your name" required>
                 <input type="text" name="room" id="room" placeholder="Enter Game ID" required>
                 <button id="join">Join Game</button>
+            </div>
         </div>
     </div>
     <main>

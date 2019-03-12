@@ -2,6 +2,13 @@
 var socket = io();
 
 
+//SOCKET LISTENERS
+// // Updates the UI and create new Game var.
+// socket.on('newGame', function (data) {
+//     const message = 'Hello, ' + data.name +
+//         '. Please ask your friend to enter Game ID: ' +
+//         data.room + '. Waiting for player 2...';
+// });
 
 // listen to the server for the `new-game` event
 socket.on('new-game', function() {
@@ -15,12 +22,63 @@ socket.on('move', function ({ previousPlayer, idx, currentTurn }) {
       `${previousPlayer} clicked on square #${idx}. It is now ${turn}'s turn.`
     );
     
-    board[idx] = previousPlayer;
+    newGame.board[idx] = previousPlayer;
 
     turn *= 1;
 
     game.render();
 });
+
+// New Game created by current client. 
+// Updates the UI and creates new Game var.
+socket.on('newGame', function (data) {
+    const message = 'Hello, ' + data.name +
+        '. Please ask your friend to enter Game ID: ' +
+        data.room + '. Waiting for player 2...';
+    $('.create-room__message').html(message);
+});
+
+// // If player creates the game, he'll be P1(X) and has the first turn.
+// // This event is received when opponent connects to the room.
+// socket.on('player1', function (data) {
+//     const message = 'Hello, ' + player.getPlayerName();
+//     $('#userHello').html(message);
+//     player.setCurrentTurn(true);
+// });
+
+// //Joined the game, so player is P2(O). 
+// // This event is received when P2 successfully joins the game room.
+// socket.on('player2', function (data) {
+//     const message = 'Hello, ' + data.name;
+
+//     //Create game for player 2
+//     game = new Game(data.room);
+//     game.displayBoard(message);
+//     player.setCurrentTurn(false);
+// });
+
+// // Opponent played his turn. Update UI.
+// // Allow the current player to play now. 
+// socket.on('turnPlayed', function (data) {
+//     const row = data.tile.split('_')[1][0];
+//     const col = data.tile.split('_')[1][1];
+//     const opponentType = player.getPlayerType() == P1 ? P2 : P1;
+//     game.updateBoard(opponentType, row, col, data.tile);
+//     player.setCurrentTurn(true);
+// });
+
+// // If the other player wins or game is tied, this event is received. 
+// // Notify the user about either scenario and end the game.
+// socket.on('gameEnd', function (data) {
+//     game.endGame(data.message);
+//     socket.leave(data.room);
+// })
+
+// // End the game on any err event. 
+// socket.on('err', function (data) {
+//     game.endGame(data.message);
+// });
+
 
 //updates mouse to match current player image
 //vanilla JavaScript
@@ -41,7 +99,7 @@ gameboard.addEventListener('mousemove', e => {
 
 
 //jQuery section
-let board, turn, winner, player, roomID;
+let newGame, board, turn, winner, player, roomID, message, idx;
 const $gameboard = $('#gameboard');
 const $squares = $('td');
 const $turnDisplay = $('#turn');
@@ -54,38 +112,7 @@ const renderLookUp = {
     'null': '/imgs/classroom.png'
 };
 
-// Room player assignment
-(function () {
 
-    // Types of players
-    const P1 = 1, P2 = -1;
-    const socket = io.connect('http://localhost:3000'),
-        player,
-        game;
-
-    //Create a new game. Emit newGame event.
-    $('#new').on('click', function () {
-        const name = $('#nameNew').val();
-        // if (!name) {
-        //     alert('Please enter your name.');
-        //     return;
-        // }
-        socket.emit('createGame', { name: name });
-        player = new Player(name, P1);
-    });
-
-    //Join an existing game on the entered roomId. Emit the joinGame event.
-    $('#join').on('click', function () {
-        const name = $('#nameJoin').val();
-        const roomID = $('#room').val();
-        // if (!name || !roomID) {
-        //     alert('Please enter your name and game ID.');
-        //     return;
-        // }
-        socket.emit('joinGame', { name: name, room: roomID });
-        player = new Player(name, P2);
-    });
-})();
 
 //Player class
 class Player {
@@ -130,18 +157,24 @@ class Player {
     }
 }
 
+// Game class
+class Game  {
+    constructor(roomId) {
+        this.roomId = roomId;
+        this.board = [];
+    }
 
-const game = {
     init() {
         //gives each square an initial value of null
-        board = new Array(9).fill('null');
+        this.board = new Array(9).fill('null');
         //sets the first player
         turn = 1;
-    },
+    }
+
     render() {
         //generates square visuals
         $squares.each(function (index, square) {
-            $(square).html(`<img src=${renderLookUp[`${board[index]}`]}>`);
+            $(square).html(`<img src=${renderLookUp[`${this.board[index]}`]}>`);
         });
 
         //updates turn
@@ -176,13 +209,14 @@ const game = {
             });
         }
 
-    },
+    }
+
     findWinner() {
         //winning combination arrays
         const winConditions = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
 
         //map actual board array values to win condition combinations
-        winConditions.forEach(combination => combination.map((square, index) => combination[index] = board[square]));
+        winConditions.forEach(combination => combination.map((square, index) => combination[index] = this.board[square]));
 
         //reduce the newly mapped array to sums. separated for clarity.
         winConditions.forEach((combination, index) => winConditions[index] = combination.reduce((acc, squareValue) => acc += squareValue, 0));
@@ -193,9 +227,9 @@ const game = {
         for (let i = 0; i < winConditions.length; i++) {
             if (Math.abs(winConditions[i]) === 3) {
                 //if winner present, squares become unclickable
-                board.forEach((square, index) => {
+                this.board.forEach((square, index) => {
                     if (square === 'null') {
-                        board[index] = 0;
+                        this.board[index] = 0;
                     }
                 });
 
@@ -206,42 +240,20 @@ const game = {
                 return 0
             }
         }
-
-        //SAME AS ABOVE, BUT WITH FOR LOOPS
-        // let winComboCheck = [];
-        // let winValues = [];
-        // for (let i = 0; i < winConditions.length; i++) {
-        //     winComboCheck.push(winConditions[i].map(square => square = board[square]));
-        // }
-
-        // for (let i = 0; i < winComboCheck.length; i++) {
-        //     winValues.push(winComboCheck[i].reduce((acc, square) => acc += square, 0));
-        // };
-
-        // console.log(winValues);
-
-        // for (let i = 0; i < winValues.length; i++) {
-        //     if (Math.abs(winValues[i]) === 3) {
-        //         return winValues[i]/3
-        //     }
-        // }
-
     }
 };
 
 
 $('td').on('click', function (e) {
-    // console.log($(e));
-    // console.log(e.currentTarget);
-    // console.log(e.target.id);
-    let idx = parseInt(e.currentTarget.id);
-    // console.log(idx, 'this is idx');
 
-    if (board[idx] === 'null') {
-        board[idx] = turn;
-        // console.log(board[idx], 'board at idx');
+    idx = parseInt(e.currentTarget.id);
+
+
+    if (newGame.board[idx] === 'null') {
+        newGame.board[idx] = turn;
+
         turn *= -1;
-        // console.log(board); 
+
         socket.emit('move', {
             previousPlayer: turn * -1,
             idx: idx,
@@ -258,3 +270,72 @@ $("#new-game").on('click', function (e) {
 
     socket.emit('new-game');
 });
+
+
+// Socket Rooms
+//Create a new game. Emit newGame event.
+$('#new').on('click', function () {
+    console.log(' clicking #new');
+    const name = $('#nameNew').val();
+    if (!name) {
+        $('.create-room__header').text('Please Enter a Name!')
+        return;
+    } else {
+        $('#create-room').hide();
+        $('#join-room').hide();
+    } 
+    socket.emit('createGame', { name: name });
+    player = new Player(name, P1);
+});
+
+// //Join an existing game on the entered roomId. Emit the joinGame event.
+// $('#join').on('click', function () {
+//     const name = $('#nameJoin').val();
+//     const roomID = $('#room').val();
+//     // if (!name || !roomID) {
+//     //     alert('Please enter your name and game ID.');
+//     //     return;
+//     // }
+//     socket.emit('joinGame', { name: name, room: roomID });
+//     player = new Player(name, P2);
+// });
+
+
+
+
+
+
+// // Room player assignment
+// // (function () {
+
+// // Types of players
+// const P1 = 1, P2 = -1;
+// const socket = io.connect('http://localhost:3000'),
+//     player,
+//     game;
+
+//Create a new game. Emit newGame event.
+// $('#new').on('click', function () {
+//     console.log(' clicking #new');
+//     const name = $('#nameNew').val();
+//     // if (!name) {
+//     //     alert('Please enter your name.');
+//     //     return;
+//     // }
+//     $('#create-new').hide();
+//     socket.emit('createGame', { name: name });
+//     player = new Player(name, P1);
+// });
+
+// //Join an existing game on the entered roomId. Emit the joinGame event.
+// $('#join').on('click', function () {
+//     const name = $('#nameJoin').val();
+//     const roomID = $('#room').val();
+//     // if (!name || !roomID) {
+//     //     alert('Please enter your name and game ID.');
+//     //     return;
+//     // }
+//     socket.emit('joinGame', { name: name, room: roomID });
+//     player = new Player(name, P2);
+// });
+// // })();
