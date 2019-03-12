@@ -1,0 +1,26 @@
+{
+  "name": "tic-tac-toe-socket",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BryantCabrera/tic-tac-toe-socket.git"
+  },
+  "author": "Bryant Cabrera",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BryantCabrera/tic-tac-toe-socket/issues"
+  },
+  "homepage": "https://github.com/BryantCabrera/tic-tac-toe-socket#readme",
+  "dependencies": {
+    "debug": "^4.1.1",
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "morgan": "^1.9.1",
+    "socket.io": "^2.2.0"
+  }
+}
