@@ -41,7 +41,7 @@ gameboard.addEventListener('mousemove', e => {
 
 
 //jQuery section
-let board, turn, winner;
+let board, turn, winner, player;
 const $gameboard = $('#gameboard');
 const $squares = $('td');
 const $turnDisplay = $('#turn');
@@ -54,6 +54,38 @@ const renderLookUp = {
     'null': '/imgs/classroom.png'
 };
 
+// Room player assignment
+(function () {
+
+    // Types of players
+    const P1 = 1, P2 = -1;
+    const socket = io.connect('http://localhost:3000'),
+        player,
+        game;
+
+    //Create a new game. Emit newGame event.
+    $('#new').on('click', function () {
+        const name = $('#nameNew').val();
+        // if (!name) {
+        //     alert('Please enter your name.');
+        //     return;
+        // }
+        socket.emit('createGame', { name: name });
+        player = new Player(name, P1);
+    });
+
+    //Join an existing game on the entered roomId. Emit the joinGame event.
+    $('#join').on('click', function () {
+        const name = $('#nameJoin').val();
+        const roomID = $('#room').val();
+        // if (!name || !roomID) {
+        //     alert('Please enter your name and game ID.');
+        //     return;
+        // }
+        socket.emit('joinGame', { name: name, room: roomID });
+        player = new Player(name, P2);
+    });
+})();
 
 const game = {
     init() {
