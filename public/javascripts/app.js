@@ -94,6 +94,11 @@ socket.on('err', function (data) {
     $(".container").html(message);
 });
 
+// If game has ended, display New Game button.
+socket.on("gameEnded", function(data) {
+    $("#new-game").show();
+});
+
 // // Opponent played his turn. Update UI.
 // // Allow the current player to play now. 
 // socket.on('turnPlayed', function (data) {
