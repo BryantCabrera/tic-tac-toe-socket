@@ -25,9 +25,9 @@ const players = ['Player 1', 'Player 2'];
 
 
 const renderLookUp = {
-    '1': 'resources/imgs/player1.png',
-    '-1': 'resources/imgs/player2.png',
-    'null': 'resources/imgs/classroom.png'
+    '1': '/imgs/player1.png',
+    '-1': '/imgs/player2.png',
+    'null': '/imgs/classroom.png'
 };
 
 
