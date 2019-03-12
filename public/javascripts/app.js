@@ -1,6 +1,10 @@
+// get our connection to the socket.io server
+var socket = io();
+// listen to the server for the `add-circle` event
+
 //updates mouse to match current player image
 //vanilla JavaScript
-var root = document.documentElement;
+const root = document.documentElement;
 const gameboard = document.getElementById('gameboard');
 
 gameboard.addEventListener('mousemove', e => {
