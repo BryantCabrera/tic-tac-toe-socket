@@ -1,6 +1,18 @@
 // get our connection to the socket.io server
 var socket = io();
-// listen to the server for the `add-circle` event
+
+// listen to the server for the `move` event
+socket.on('move', function ({ previousPlayer, idx, currentTurn }) {
+    console.log(
+      `${previousPlayer} clicked on square #${idx}. It is now ${turn}'s turn.`
+    );
+    
+    board[idx] = previousPlayer;
+
+    turn = currentTurn;
+
+    game.render();
+});
 
 //updates mouse to match current player image
 //vanilla JavaScript
@@ -136,7 +148,12 @@ $('td').on('click', function (e) {
         board[idx] = turn;
         // console.log(board[idx], 'board at idx');
         turn *= -1;
-        // console.log(board);    
+        // console.log(board); 
+        socket.emit('move', {
+            previousPlayer: turn * -1,
+            idx: idx,
+            turn: turn
+        });   
         game.render();
     }
 });
