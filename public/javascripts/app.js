@@ -41,7 +41,7 @@ gameboard.addEventListener('mousemove', e => {
 
 
 //jQuery section
-let board, turn, winner, player;
+let board, turn, winner, player, roomID;
 const $gameboard = $('#gameboard');
 const $squares = $('td');
 const $turnDisplay = $('#turn');
@@ -161,10 +161,19 @@ const game = {
         //updates UI to let players know who won
         if (game.findWinner() === 1) {
             $turnDisplay.text(`${players[0]} has won the game!`);
+            socket.emit('gameEnded', {
+                room: roomID
+            });
         } else if (game.findWinner() === -1) {
             $turnDisplay.text(`${players[1]} has won the game!`);
+            socket.emit('gameEnded', {
+                room: roomID
+            });
         } else if (game.findWinner() === 0) {
             $turnDisplay.text(`It was a tie game!  Both Jims won!`);
+            socket.emit('gameEnded', {
+                room: roomID
+            });
         }
 
     },
