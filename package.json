@@ -18,8 +18,11 @@
   "homepage": "https://github.com/BryantCabrera/tic-tac-toe-socket#readme",
   "dependencies": {
     "debug": "^4.1.1",
+    "dotenv": "^6.2.0",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
+    "http": "0.0.0",
+    "io": "^1.0.0",
     "morgan": "^1.9.1",
     "socket.io": "^2.2.0"
   }

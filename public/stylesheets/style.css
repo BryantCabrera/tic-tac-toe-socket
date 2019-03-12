@@ -142,7 +142,7 @@ td {
     width: 30px;
     height: 30px;
     border-radius: 50%;
-    background-image: url('resources/imgs/player1.png');
+    background-image: url('../imgs/player1.png');
     position: absolute;
     left: var(--x);
     top: var(--y);

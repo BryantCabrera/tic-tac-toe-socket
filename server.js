@@ -1,15 +1,16 @@
-var express = require("express");
-var path = require("path");
-var logger = require("morgan");
+require("dotenv").config();
+const express = require("express");
+const path = require("path");
+const logger = require("morgan");
+const http = require("http");
+const routes = require("./routes/index");
 
-var routes = require("./routes/index");
-
-var app = express();
-var server = http.createServer(app);
+const app = express();
+const server = http.Server(app);
 
 // load and attach socket.io to http server
-var io = require('../io');
-io.attach(server);
+const socketio = require('socket.io');
+app.set("io", socketio);
 
 
 // view engine setup
