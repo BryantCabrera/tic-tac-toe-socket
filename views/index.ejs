@@ -1,3 +1,16 @@
-<h1><%= message %></h1>
-<h2><%= error.status %></h2>
-<pre><%= error.stack %></pre>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Bryant's Tic-Tac-Toe with Socket.io</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+  </head>
+  <body>
+    <header><span class="title">Bryant's Tic-Tac-Toe with Socket.io</span><button class="btn clear">clear</button></header>
+    <main id="gameboard">
+    
+    </main>
+    <footer><ul id="players"></ul></footer>
+  </body>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/javascripts/app.js"></script>
+</html>
