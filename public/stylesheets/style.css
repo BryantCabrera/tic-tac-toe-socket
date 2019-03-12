@@ -1,0 +1,306 @@
+:root {
+    --x: 50px;
+    --y: 50px;
+    --color1: #FFFFFF;
+    --color2: #2A4794;
+    --color3: #E5002D;
+    --color4: #F9B822;
+}
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+html {
+    background-color: var(--color1);
+    color: var(--color2);
+    font-family: 'Pokemon_GB.ttf', 'Arial', sans-serif;
+    font-weight: 300;
+    font-size: 20px;
+    text-rendering: optimizeLegibility;
+}
+
+
+/*-----REUSEABLE CONTENT----*/
+.btn:link, 
+.btn:visited {
+    display: inline-block;
+    padding: 10px 30px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: 1px solid var(--color3);
+    color: var(--color3);
+    text-decoration: none;
+    font-size: 16px;
+    border-radius: 200px;
+    transition: background-color 0.2s, border 0.2s, color 0.2s;
+}
+
+.btn:hover, 
+.btn:active {
+    background-color: var(--color3); 
+    border: 1px solid var(--color3);
+    color: var(--color1);
+}
+
+.row {
+    max-width: 1140px;
+    margin: 0 auto;
+}
+
+/*-----NAV----*/
+nav {
+    display: flex;
+    justify-content: space-evenly;
+    background-color: var(--color2);
+}
+
+#logo {
+    height: 75px;
+    width: auto;
+    margin-top: 20px;
+}
+
+nav h1 {
+    align-self: flex-end;
+    flex-grow: 2;
+    color: var(--color1);
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+nav ul {
+    list-style: none;
+    margin-top: 55px;
+}
+
+nav ul li {
+    display: inline-block;
+    margin-left: 10px;
+    font-size: 14px;
+}
+
+nav ul:last-child {
+    margin-right: 10px;
+}
+
+nav li a:link,
+nav li a:visited {
+    padding: 8px 0;
+    color: var(--color1);
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 70%;
+    border-bottom: 2px solid transparent;
+    transition: border-bottom 0.2s;
+}
+
+nav li a:hover,
+nav li a:active {
+    border-bottom: 2px solid var(--color1);
+}
+
+.model {
+    text-align: center;
+}
+/*-----HEADER----*/
+header {
+    text-align: center;
+}
+
+
+/*-----MAIN-----*/
+table {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+tr {
+    height: 100px;
+}
+
+td {
+    width: 100px;
+    border: 1px solid #000000;
+}
+
+#circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: lightblue;
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+}
+
+#player1 {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-image: url('resources/imgs/player1.png');
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+}
+
+#player1-img {
+    height: 70px;
+    width: auto;
+    display: none;
+}
+
+#player2 {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    /* background-image: url('/Users/bryantcabrera/code/wdi/w02/d5/tic-tac-toe-weekend/resources/imgs/player2.png'); */
+    /* background: (#player2-img) no-repeat;
+    content: url('/Users/bryantcabrera/code/wdi/w02/d5/tic-tac-toe-weekend/resources/imgs/player2.png'); */
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+}
+
+#player2-img {
+    height: 70px;
+    width: auto;
+    display: none;
+}
+
+td {
+    background-image: url('https://i.imgur.com/e95yQ5l.png');
+} 
+
+td img {
+    height: 100px;
+    width: 100px;
+    opacity: 0.9;
+}
+
+section {
+    text-align: center;
+}
+
+section a:link,
+section a:visited {
+    text-decoration: none;
+    color: var(--color2);
+    transition: border-bottom 0.2s;
+}
+
+section a:hover,
+section a:active {
+    text-decoration: none;
+    color: var(--color2);
+    border-bottom: 2px solid var(--color2);
+}
+
+.btn:link, 
+.btn:visited {
+    display: inline-block;
+    padding: 10px 30px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: 1px solid var(--color2);
+    color: var(--color2);
+    text-decoration: none;
+    font-size: 16px;
+    border-radius: 200px;
+    transition: background-color 0.2s, border 0.2s, color 0.2s;
+}
+
+.btn:hover, 
+.btn:active {
+    background-color: var(--color2); 
+    border: 1px solid var(--color2);
+    color: var(--color4);
+}
+/*-----Footer-----*/
+footer {
+    background-color: var(--color2);
+    padding: 30px;
+    font-size: 80%;
+}
+
+footer div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer-nav li,
+.social-links li {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+.footer-nav li:last-child,
+.social-links li:last-child {
+    margin-right: 0;
+}
+
+.footer-nav li a:link,
+.footer-nav li a:visited,
+.social-links li a:link,
+.social-links li a:visited {
+    text-decoration: none;
+    border: 0;
+    color: var(--color1);
+    transition: color 0.2s;
+}
+
+.footer-nav li a:hover,
+.footer-nav li a:active {
+    color: var(--color4);
+}
+
+.social-links li a:link,
+.social-links li a:visited {
+    font-size: 160%;
+}
+
+.ion-social-facebook,
+.ion-social-twitter,
+.ion-social-googleplus,
+.ion-social-instagram {
+    transition: color 0.2s;
+}
+
+.ion-social-facebook:hover {
+    /* color: #3b5998; */
+    color: #6685c9;
+}
+
+.ion-social-twitter:hover {
+    color: #00aced;
+}
+
+.ion-social-googleplus:hover {
+    color: #dd4b39;
+}
+
+.ion-social-instagram:hover {
+    /* color: #517fa4; */
+    color: var(--color4);
+}
+
+/*-----Icons-----*/
+a:link,
+a:visited {
+    color: var(--color1);
+    text-decoration: none;
+    padding-bottom: 1px;
+    border-bottom: 1px solid var(--color1);
+    transition: border-bottom 0.2s, color 0.2s;
+}
+
+a:hover,
+a:active {
+    color: #80101D;
+    border-bottom: 1px solid transparent;
+}
