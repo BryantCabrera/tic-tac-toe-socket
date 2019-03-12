@@ -1,6 +1,8 @@
 // get our connection to the socket.io server
 var socket = io();
 
+
+
 // listen to the server for the `new-game` event
 socket.on('new-game', function() {
     game.init();
@@ -15,7 +17,7 @@ socket.on('move', function ({ previousPlayer, idx, currentTurn }) {
     
     board[idx] = previousPlayer;
 
-    turn = currentTurn;
+    turn *= 1;
 
     game.render();
 });
