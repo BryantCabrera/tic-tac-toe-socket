@@ -8,8 +8,8 @@ io.on('connection', function (socket) {
     //     connectCounter++;
     // });
 
-    socket.on('new-game', function () {
-        io.emit('new-game');
+    socket.on('new-game', function (data) {
+        io.emit('new-game', data);
     });
 
     socket.on("move", function (data) {
@@ -29,7 +29,7 @@ io.on('connection', function (socket) {
 
     //Connects Player 2 to the room with the appropriate roomID. Updates UI to display an error if the room is full.
     socket.on('joinGame', function (data) {
-       const room = io.nsps['/'].adapter.rooms[data.room];
+        const room = io.nsps['/'].adapter.rooms[data.room];
         if (room && room.length == 1) {
             socket.join(data.room);
             socket.broadcast.to(data.room).emit('player1', {});

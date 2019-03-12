@@ -1,10 +1,44 @@
-// get our connection to the socket.io server
-var socket = io();
+//updates mouse to match current player image
+//vanilla JavaScript
+const root = document.documentElement;
+const gameboard = document.getElementById('gameboard');
 
+gameboard.addEventListener('mousemove', e => {
+    root.style.setProperty('--x', (e.clientX - 15) + 'px');
+    root.style.setProperty('--y', (e.clientY - 15) + 'px');
+});
+//jQuery version
+// const root = $('document.documentElement');
+
+// $('#gameboard').on('mousemove', e => {
+//     root.css('--x', (e.clientX - 15) + 'px');
+//     root.css('--y', (e.clientY -15) + 'px');
+// });
+
+
+//jQuery section
+let board, turn, winner, player, roomID, message, idx;
+var game;
+const $gameboard = $('#gameboard');
+const $squares = $('td');
+const $turnDisplay = $('#turn');
+const players = ['Player 1', 'Player 2'];
+
+const renderLookUp = {
+    '1': '/imgs/player1.png',
+    '-1': '/imgs/player2.png',
+    'null': '/imgs/classroom.png'
+};
+
+$("#new-game").hide();
+
+// get our connection to the socket.io server
+const socket = io();
 
 //SOCKET LISTENERS
 // listen to the server for the `new-game` event
-socket.on('new-game', function() {
+socket.on('new-game', function(data) {
+    game = new Game(data.room);
     game.init();
     game.render();
 });
@@ -17,7 +51,7 @@ socket.on('move', function ({ previousPlayer, idx, currentTurn }) {
     
     game.board[idx] = previousPlayer;
 
-    turn *= 1;
+    game.turn *= -1;
 
     game.render();
 });
@@ -29,6 +63,7 @@ socket.on('newGame', function (data) {
         '. Please ask your friend to enter Game ID: ' +
         data.room + '. Waiting for player 2...';
     $('.create-room__message').html(message);
+    $("#create-room").hide();
 });
 
 // If player creates the game/room, he/she will be Player 1 (1).
@@ -40,14 +75,23 @@ socket.on('player1', function (data) {
 });
 
 // The person who joined the game is Player 2 (-1). 
-// When Player 2 successfully joins the game room, emit this message.
+// When Player 2 successfully joins the game room, this message received.
 socket.on('player2', function (data) {
     const message = 'Hello, ' + data.name;
 
     //Create game for player 2
-    game = new Game(data.room);
+    console.log(game, ' this is game');
     $(".container").html(message);
     player.setCurrentTurn(false);
+    socket.emit('new-game', { room: data.room });
+});
+
+// If connection failed, displays error
+socket.on('err', function (data) {
+    const message = data.message;
+
+    // Displays error
+    $(".container").html(message);
 });
 
 // // Opponent played his turn. Update UI.
@@ -73,40 +117,6 @@ socket.on('player2', function (data) {
 // });
 
 
-//updates mouse to match current player image
-//vanilla JavaScript
-const root = document.documentElement;
-const gameboard = document.getElementById('gameboard');
-
-gameboard.addEventListener('mousemove', e => {
-    root.style.setProperty('--x', (e.clientX - 15) + 'px');
-    root.style.setProperty('--y', (e.clientY - 15) + 'px');
-});
-//jQuery version
-// const root = $('document.documentElement');
-
-// $('#gameboard').on('mousemove', e => {
-//     root.css('--x', (e.clientX - 15) + 'px');
-//     root.css('--y', (e.clientY -15) + 'px');
-// });
-
-
-//jQuery section
-let game, board, turn, winner, player, roomID, message, idx;
-const $gameboard = $('#gameboard');
-const $squares = $('td');
-const $turnDisplay = $('#turn');
-const players = ['Player 1', 'Player 2'];
-
-
-const renderLookUp = {
-    '1': '/imgs/player1.png',
-    '-1': '/imgs/player2.png',
-    'null': '/imgs/classroom.png'
-};
-
-
-
 //Player class
 class Player {
     constructor(name, type) {
@@ -129,10 +139,10 @@ class Player {
     setCurrentTurn = function (turn) {
         this.currentTurn = turn;
         if (turn) {
-            $('#turn').text('Your turn.');
+            $('#container').text('Your turn.');
         }
         else {
-            $('#turn').text('Waiting for Opponent');
+            $('#container').text('Waiting for Opponent.');
         }
     }
 
@@ -168,7 +178,7 @@ class Game  {
     render() {
         //generates square visuals
         $squares.each(function (index, square) {
-            $(square).html(`<img src=${renderLookUp[`${this.board[index]}`]}>`);
+            $(square).html(`<img src=${renderLookUp[`${game.board[index]}`]}>`);
         });
 
         //updates turn
@@ -242,16 +252,18 @@ $('td').on('click', function (e) {
 
     idx = parseInt(e.currentTarget.id);
 
+    console.log(player.type, ' this is player.type');
+    console.log(game.turn, ' this is game.turn');
 
-    if (game.board[idx] === 'null') {
-        game.board[idx] = game.turn;
+    if (game.board[idx] === 'null' && player.type === game.turn) {
+        // game.board[idx] = game.turn;
 
-        game.turn *= -1;
+        // game.turn *= -1;
 
         socket.emit('move', {
-            previousPlayer: game.turn * -1,
+            previousPlayer: game.turn,
             idx: idx,
-            turn: game.turn
+            turn: game.turn * -1
         });   
         game.render();
     }
@@ -272,14 +284,13 @@ $('#new').on('click', function () {
     console.log(' clicking #new');
     const name = $('#nameNew').val();
     if (!name) {
-        $('.create-room__header').text('Please Enter a Name!')
+        $('.create-room__header').text('Please Enter a Name!');
         return;
     } else {
-        $('#create-room').hide();
         $('#join-room').hide();
     } 
     socket.emit('createGame', { name: name });
-    player = new Player(name, P1);
+    player = new Player(name, 1);
 });
 
 //Join an existing game on the entered roomId. Emit the joinGame event.
