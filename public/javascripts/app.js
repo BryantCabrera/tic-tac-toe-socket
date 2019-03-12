@@ -3,13 +3,6 @@ var socket = io();
 
 
 //SOCKET LISTENERS
-// // Updates the UI and create new Game var.
-// socket.on('newGame', function (data) {
-//     const message = 'Hello, ' + data.name +
-//         '. Please ask your friend to enter Game ID: ' +
-//         data.room + '. Waiting for player 2...';
-// });
-
 // listen to the server for the `new-game` event
 socket.on('new-game', function() {
     game.init();
@@ -22,7 +15,7 @@ socket.on('move', function ({ previousPlayer, idx, currentTurn }) {
       `${previousPlayer} clicked on square #${idx}. It is now ${turn}'s turn.`
     );
     
-    newGame.board[idx] = previousPlayer;
+    game.board[idx] = previousPlayer;
 
     turn *= 1;
 
@@ -38,24 +31,24 @@ socket.on('newGame', function (data) {
     $('.create-room__message').html(message);
 });
 
-// // If player creates the game, he'll be P1(X) and has the first turn.
-// // This event is received when opponent connects to the room.
-// socket.on('player1', function (data) {
-//     const message = 'Hello, ' + player.getPlayerName();
-//     $('#userHello').html(message);
-//     player.setCurrentTurn(true);
-// });
+// If player creates the game/room, he/she will be Player 1 (1).
+// When opponent connects to the room, updates player 1's UI.
+socket.on('player1', function (data) {
+    const message = 'Hello, ' + player.getPlayerName();
+    $('.container').html(message);
+    player.setCurrentTurn(true);
+});
 
-// //Joined the game, so player is P2(O). 
-// // This event is received when P2 successfully joins the game room.
-// socket.on('player2', function (data) {
-//     const message = 'Hello, ' + data.name;
+// The person who joined the game is Player 2 (-1). 
+// When Player 2 successfully joins the game room, emit this message.
+socket.on('player2', function (data) {
+    const message = 'Hello, ' + data.name;
 
-//     //Create game for player 2
-//     game = new Game(data.room);
-//     game.displayBoard(message);
-//     player.setCurrentTurn(false);
-// });
+    //Create game for player 2
+    game = new Game(data.room);
+    $(".container").html(message);
+    player.setCurrentTurn(false);
+});
 
 // // Opponent played his turn. Update UI.
 // // Allow the current player to play now. 
@@ -99,7 +92,7 @@ gameboard.addEventListener('mousemove', e => {
 
 
 //jQuery section
-let newGame, board, turn, winner, player, roomID, message, idx;
+let game, board, turn, winner, player, roomID, message, idx;
 const $gameboard = $('#gameboard');
 const $squares = $('td');
 const $turnDisplay = $('#turn');
@@ -159,16 +152,17 @@ class Player {
 
 // Game class
 class Game  {
-    constructor(roomId) {
-        this.roomId = roomId;
+    constructor(roomID) {
+        this.roomID = roomID;
         this.board = [];
+        this.turn = 1;
     }
 
     init() {
         //gives each square an initial value of null
         this.board = new Array(9).fill('null');
         //sets the first player
-        turn = 1;
+        this.turn = 1;
     }
 
     render() {
@@ -178,11 +172,11 @@ class Game  {
         });
 
         //updates turn
-        if (turn === 1) {
+        if (this.turn === 1) {
             $turnDisplay.text(`It is ${players[0]}'s turn.`);
             $('#player1-img').css('display', 'inline-block');
             $('#player2-img').css('display', 'none');
-        } else if (turn === -1) {
+        } else if (this.turn === -1) {
             $turnDisplay.text(`It is ${players[1]}'s turn.`);
             $('#player1-img').css('display', 'none');
             $('#player2-img').css('display', 'inline-block');
@@ -249,15 +243,15 @@ $('td').on('click', function (e) {
     idx = parseInt(e.currentTarget.id);
 
 
-    if (newGame.board[idx] === 'null') {
-        newGame.board[idx] = turn;
+    if (game.board[idx] === 'null') {
+        game.board[idx] = game.turn;
 
-        turn *= -1;
+        game.turn *= -1;
 
         socket.emit('move', {
-            previousPlayer: turn * -1,
+            previousPlayer: game.turn * -1,
             idx: idx,
-            turn: turn
+            turn: game.turn
         });   
         game.render();
     }
@@ -288,17 +282,17 @@ $('#new').on('click', function () {
     player = new Player(name, P1);
 });
 
-// //Join an existing game on the entered roomId. Emit the joinGame event.
-// $('#join').on('click', function () {
-//     const name = $('#nameJoin').val();
-//     const roomID = $('#room').val();
-//     // if (!name || !roomID) {
-//     //     alert('Please enter your name and game ID.');
-//     //     return;
-//     // }
-//     socket.emit('joinGame', { name: name, room: roomID });
-//     player = new Player(name, P2);
-// });
+//Join an existing game on the entered roomId. Emit the joinGame event.
+$('#join').on('click', function () {
+    const name = $('#nameJoin').val();
+    const roomID = $('#room').val();
+    if (!name || !roomID) {
+        $('.join-room__header').text('Please enter your name and game ID.');
+        return;
+    }
+    socket.emit('joinGame', { name: name, room: roomID });
+    player = new Player(name, -1);
+});
 
 
 
