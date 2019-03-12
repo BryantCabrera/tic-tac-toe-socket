@@ -87,6 +87,50 @@ const renderLookUp = {
     });
 })();
 
+//Player class
+class Player {
+    constructor(name, type) {
+        this.name = name;
+        this.type = type;
+        this.currentTurn = true;
+        this.movesPlayed = [];
+    }
+    
+    //Set the bit of the move played by the player
+    updateMovesPlayed = function (idx) {
+        this.movesPlayed.push(idx);
+    }
+
+    getMovesPlayed = function () {
+        return this.movesPlayed;
+    }
+
+    //Set the currentTurn for player to turn and update UI to reflect the same.
+    setCurrentTurn = function (turn) {
+        this.currentTurn = turn;
+        if (turn) {
+            $('#turn').text('Your turn.');
+        }
+        else {
+            $('#turn').text('Waiting for Opponent');
+        }
+    }
+
+    getPlayerName = function () {
+        return this.name;
+    }
+
+    getPlayerType = function () {
+        return this.type;
+    }
+
+    //Returns currentTurn to determine if it is the player's turn.
+    getCurrentTurn = function () {
+        return this.currentTurn;
+    }
+}
+
+
 const game = {
     init() {
         //gives each square an initial value of null
