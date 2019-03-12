@@ -1,6 +1,12 @@
 // get our connection to the socket.io server
 var socket = io();
 
+// listen to the server for the `new-game` event
+socket.on('new-game', function() {
+    game.init();
+    game.render();
+});
+
 // listen to the server for the `move` event
 socket.on('move', function ({ previousPlayer, idx, currentTurn }) {
     console.log(
@@ -162,4 +168,6 @@ $('td').on('click', function (e) {
 $("#new-game").on('click', function (e) {
     game.init();
     game.render();
+
+    socket.emit('new-game');
 });
