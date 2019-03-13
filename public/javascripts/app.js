@@ -130,9 +130,9 @@ socket.on('err', function (data) {
 
 // If game has ended, display New Game button.
 socket.on("gameEnded", function(data) {
-    let userWins = this.user.games && this.user.games.map(game => game.title).includes('Tic-Tac-Toe') ? this.user.games.filter(game => game.title === 'Tic-Tac-Toe')[0].wins : 0;
-    let userLosses = this.user.games && this.user.games.map(game => game.title).includes('Tic-Tac-Toe') ? this.user.games.filter(game => game.title === 'Tic-Tac-Toe')[0].losses : 0;
-    let userDraws = this.user.games && this.user.games.map(game => game.title).includes('Tic-Tac-Toe') ? this.user.games.filter(game => game.title === 'Tic-Tac-Toe')[0].draws : 0;
+    let userWins = this.user.games.length > 0 && this.user.games.map(game => game.title).includes('Tic-Tac-Toe') ? this.user.games.filter(game => game.title === 'Tic-Tac-Toe')[0].wins : 0;
+    let userLosses = this.user.games.length > 0 && this.user.games.map(game => game.title).includes('Tic-Tac-Toe') ? this.user.games.filter(game => game.title === 'Tic-Tac-Toe')[0].losses : 0;
+    let userDraws = this.user.games.length > 0 && this.user.games.map(game => game.title).includes('Tic-Tac-Toe') ? this.user.games.filter(game => game.title === 'Tic-Tac-Toe')[0].draws : 0;
 
     if (game.winner === 0) {
         userDraws++;
@@ -150,7 +150,7 @@ socket.on("gameEnded", function(data) {
         draws: userDraws
     }
 
-    if (this.user.games && this.user.games.map(game => game.title).includes('Tic-Tac-Toe')) {
+    if (this.user.games.length > 0 && this.user.games.map(game => game.title).includes('Tic-Tac-Toe')) {
         this.user.games.map((game, index) => {
             if (game.title === 'Tic-Tac-Toe') {
                 games[index] = gameIngo
