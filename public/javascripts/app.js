@@ -56,6 +56,7 @@ bindEvent(window, 'message', function (e) {
     const data = JSON.parse(e.data);
     //sets global user to parsed data
     user = data;
+    console.log(user, ' this is user from TTT app.js.');
 
     // console.log(data, ' this is parsed data from Tic Tac Toe app.js');
 
