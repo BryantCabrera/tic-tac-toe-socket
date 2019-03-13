@@ -30,7 +30,12 @@ const renderLookUp = {
     'null': '/imgs/classroom.png'
 };
 
-$("#new-game").hide();
+// $("#new-game").hide();
+
+// Listen to messages from parent window
+bindEvent(window, 'message', function (e) {
+    $('#nameNew').val(e.data)
+});
 
 // get our connection to the socket.io server
 const socket = io();
@@ -64,6 +69,7 @@ socket.on('newGame', function (data) {
         data.room + '. Waiting for player 2...';
     $('.create-room__message').html(message);
     $("#create-room").hide();
+    $("#new-game").hide();
 });
 
 // If player creates the game/room, he/she will be Player 1 (1).
