@@ -72,7 +72,7 @@ const socket = io();
 //SOCKET LISTENERS
 // listen to the server for the `new-game` event
 socket.on('new-game', function(data) {
-    if (game && game.winner != -2) {
+    if (!game) {
         game = new Game(data.room);
     }
     game.init();
