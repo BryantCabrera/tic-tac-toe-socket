@@ -111,7 +111,6 @@ socket.on('player2', function (data) {
     const message = 'Hello, ' + data.name;
 
     //Create game for player 2
-    console.log(game, ' this is game');
     $(".container").html(message);
     player.setCurrentTurn(false);
     socket.emit('new-game', { room: data.room });
@@ -288,9 +287,6 @@ $('td').on('click', function (e) {
 
     idx = parseInt(e.currentTarget.id);
 
-    console.log(player.type, ' this is player.type');
-    console.log(game.turn, ' this is game.turn');
-
     if (game.board[idx] === 'null' && player.type === game.turn) {
         // game.board[idx] = game.turn;
 
@@ -317,7 +313,6 @@ $("#new-game").on('click', function (e) {
 // Socket Rooms
 //Create a new game. Emit newGame event.
 $('#new').on('click', function () {
-    console.log(' clicking #new');
     const name = $('#nameNew').val();
     if (!name) {
         $('.create-room__header').text('Please Enter a Name!');
