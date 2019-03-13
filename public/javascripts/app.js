@@ -56,7 +56,7 @@ bindEvent(window, 'message', function (e) {
     const data = JSON.parse(e.data);
     //sets global user to parsed data
     user = data;
-    console.log(user, ' this is user from TTT app.js.');
+    // console.log(user, ' this is user from TTT app.js.');
 
     // console.log(data, ' this is parsed data from Tic Tac Toe app.js');
 
@@ -81,9 +81,9 @@ socket.on('new-game', function(data) {
 
 // listen to the server for the `move` event
 socket.on('move', function ({ previousPlayer, idx, currentTurn }) {
-    console.log(
-      `${previousPlayer} clicked on square #${idx}. It is now ${turn}'s turn.`
-    );
+    // console.log(
+    //   `${previousPlayer} clicked on square #${idx}. It is now ${turn}'s turn.`
+    // );
     
     game.board[idx] = previousPlayer;
 
