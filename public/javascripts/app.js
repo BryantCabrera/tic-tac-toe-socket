@@ -130,17 +130,17 @@ socket.on('err', function (data) {
 // If game has ended, display New Game button.
 socket.on("gameEnded", function(data) {
     $("#new-game").show();
-    if (this.users.games && this.users.games.map(game => game.title).includes('Tic-Tac-Toe')) {
+    // if (this.users.games && this.users.games.map(game => game.title).includes('Tic-Tac-Toe')) {
 
-    } else {
-        user.games.push({
-            title: 'Tic-Tac-Toe',
-            author: 'Bryant Cabrera',
-            wins: 0,
-            losses: 0,
-            draws: 0
-        });
-    }
+    // } else {
+    //     user.games.push({
+    //         title: 'Tic-Tac-Toe',
+    //         author: 'Bryant Cabrera',
+    //         wins: 0,
+    //         losses: 0,
+    //         draws: 0
+    //     });
+    // }
     sendMessage(game.winner);
 });
 
