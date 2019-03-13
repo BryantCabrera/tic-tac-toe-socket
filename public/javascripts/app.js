@@ -129,19 +129,39 @@ socket.on('err', function (data) {
 
 // If game has ended, display New Game button.
 socket.on("gameEnded", function(data) {
-    $("#new-game").show();
-    // if (this.users.games && this.users.games.map(game => game.title).includes('Tic-Tac-Toe')) {
+    let userWins = this.user.games && this.user.games.map(game => game.title).includes('Tic-Tac-Toe') ? this.user.games.filter(game => game.title === 'Tic-Tac-Toe')[0].wins : 0;
+    let userLosses = this.user.games && this.user.games.map(game => game.title).includes('Tic-Tac-Toe') ? this.user.games.filter(game => game.title === 'Tic-Tac-Toe')[0].losses : 0;
+    let userDraws = this.user.games && this.user.games.map(game => game.title).includes('Tic-Tac-Toe') ? this.user.games.filter(game => game.title === 'Tic-Tac-Toe')[0].draws : 0;
 
-    // } else {
-    //     user.games.push({
-    //         title: 'Tic-Tac-Toe',
-    //         author: 'Bryant Cabrera',
-    //         wins: 0,
-    //         losses: 0,
-    //         draws: 0
-    //     });
-    // }
-    sendMessage(game.winner);
+    if (game.winner === 0) {
+        userDraws++;
+    } else if (player.type === game.winner) {
+        userWins++;
+    } else {
+        userLosses++;
+    }
+
+    gameInfo = {
+        title: 'Tic-Tac-Toe',
+        author: 'Bryant Cabrera',
+        wins: userWins,
+        losses: userLosses,
+        draws: userDraws
+    }
+
+    if (this.user.games && this.user.games.map(game => game.title).includes('Tic-Tac-Toe')) {
+        this.user.games.map((game, index) => {
+            if (game.title === 'Tic-Tac-Toe') {
+                games[index] = gameIngo
+            }
+        });
+    } else {
+        user.games.push(gameInfo);
+    }
+    sendMessage(user);
+
+    // Displays new game button
+    $("#new-game").show();
 });
 
 // // Opponent played his turn. Update UI.
@@ -250,17 +270,20 @@ class Game  {
         if (this.winner === 1) {
             $turnDisplay.text(`${players[0]} has won the game!`);
             socket.emit('gameEnded', {
-                room: roomID
+                room: roomID,
+                winner: game.winner
             });
         } else if (this.winner === -1) {
             $turnDisplay.text(`${players[1]} has won the game!`);
             socket.emit('gameEnded', {
-                room: roomID
+                room: roomID,
+                winner: game.winner,
             });
         } else if (this.winner === 0) {
             $turnDisplay.text(`It was a tie game!  Both Jims won!`);
             socket.emit('gameEnded', {
-                room: roomID
+                room: roomID,
+                winner: game.winner
             });
         }
 

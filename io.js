@@ -40,8 +40,8 @@ io.on('connection', function (socket) {
         }
     });
 
-    socket.on('gameEnded', function () {
-        socket.emit('gameEnded');
+    socket.on('gameEnded', function (data) {
+        socket.emit('gameEnded', data);
     });
 
     // //Handle the turn played by either player and notify the other.
