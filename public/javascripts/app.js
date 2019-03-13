@@ -49,12 +49,12 @@ var sendMessage = function (msg) {
 
 // Listen to messages from parent window
 bindEvent(window, 'message', function (e) {
-    console.log(e, ' this is e from TicTacToe app.js iframe');
-    console.log(e.data, ' this is e.data from TicTacToe app.js iframe');
+    // console.log(e, ' this is e from TicTacToe app.js iframe');
+    // console.log(e.data, ' this is e.data from TicTacToe app.js iframe');
 
 
     const data = JSON.parse(e.data);
-    console.log(data, ' this is parsed data from Tic Tac Toe app.js');
+    // console.log(data, ' this is parsed data from Tic Tac Toe app.js');
 
     if (data.email) {
         $('#nameNew').val(data.email).prop('disabled', true);
