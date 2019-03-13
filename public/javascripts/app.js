@@ -56,7 +56,10 @@ bindEvent(window, 'message', function (e) {
     const data = JSON.parse(e.data);
     console.log(data, ' this is parsed data from Tic Tac Toe app.js');
 
-    if (data.email) $('#nameNew').val(e.data.email);
+    if (data.email) {
+        $('#nameNew').val(data.email);
+        $("#nameJoin").val(data.email);
+    }
 });
 
 // get our connection to the socket.io server
