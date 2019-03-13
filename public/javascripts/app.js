@@ -17,7 +17,7 @@ gameboard.addEventListener('mousemove', e => {
 
 
 //jQuery section
-let board, turn, winner, player, roomID, message, idx;
+let board, turn, winner, user, player, roomID, message, idx;
 var game;
 const $gameboard = $('#gameboard');
 const $squares = $('td');
@@ -42,7 +42,7 @@ function bindEvent(element, eventName, eventHandler) {
 }
 
 // Send a message to the parent
-var sendMessage = function (msg) {
+const sendMessage = function (msg) {
     // Make sure you are sending a string, and to stringify JSON
     window.parent.postMessage(msg, '*');
 };
@@ -52,8 +52,11 @@ bindEvent(window, 'message', function (e) {
     // console.log(e, ' this is e from TicTacToe app.js iframe');
     // console.log(e.data, ' this is e.data from TicTacToe app.js iframe');
 
-
+    // parses data into JSON
     const data = JSON.parse(e.data);
+    //sets global user to parsed data
+    user = data;
+
     // console.log(data, ' this is parsed data from Tic Tac Toe app.js');
 
     if (data.email) {
