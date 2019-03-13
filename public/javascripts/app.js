@@ -57,8 +57,8 @@ bindEvent(window, 'message', function (e) {
     console.log(data, ' this is parsed data from Tic Tac Toe app.js');
 
     if (data.email) {
-        $('#nameNew').val(data.email);
-        $("#nameJoin").val(data.email);
+        $('#nameNew').val(data.email).prop('disabled', true);
+        $("#nameJoin").val(data.email).prop('disabled', true);
     }
 });
 
