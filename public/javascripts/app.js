@@ -130,6 +130,18 @@ socket.on('err', function (data) {
 // If game has ended, display New Game button.
 socket.on("gameEnded", function(data) {
     $("#new-game").show();
+    if (this.users.games && this.users.games.map(game => game.title).includes('Tic-Tac-Toe')) {
+
+    } else {
+        user.games.push({
+            title: 'Tic-Tac-Toe',
+            author: 'Bryant Cabrera',
+            wins: 0,
+            losses: 0,
+            draws: 0
+        });
+    }
+    sendMessage(game.winner);
 });
 
 // // Opponent played his turn. Update UI.
@@ -204,6 +216,7 @@ class Game  {
         this.roomID = roomID;
         this.board = [];
         this.turn = 1;
+        this.winner = -2;
     }
 
     init() {
@@ -231,20 +244,20 @@ class Game  {
         }
 
         //win logic
-        game.findWinner()
+        this.winner = game.findWinner()
 
         //updates UI to let players know who won
-        if (game.findWinner() === 1) {
+        if (this.winner === 1) {
             $turnDisplay.text(`${players[0]} has won the game!`);
             socket.emit('gameEnded', {
                 room: roomID
             });
-        } else if (game.findWinner() === -1) {
+        } else if (this.winner === -1) {
             $turnDisplay.text(`${players[1]} has won the game!`);
             socket.emit('gameEnded', {
                 room: roomID
             });
-        } else if (game.findWinner() === 0) {
+        } else if (this.winner === 0) {
             $turnDisplay.text(`It was a tie game!  Both Jims won!`);
             socket.emit('gameEnded', {
                 room: roomID
@@ -274,7 +287,7 @@ class Game  {
                         this.board[index] = 0;
                     }
                 });
-
+                
                 //return which player won
                 return winConditions[i] / 3
             } else if (winConditions.some(square => square !== 3) && winConditions.every(squareValue => squareValue === 1 || squareValue === -1)) {
