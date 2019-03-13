@@ -34,7 +34,7 @@ const renderLookUp = {
 
 // Listen to messages from parent window
 bindEvent(window, 'message', function (e) {
-    $('#nameNew').val(e.data)
+    if (e.data.email) $('#nameNew').val(e.data.email);
 });
 
 // get our connection to the socket.io server
