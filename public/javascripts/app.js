@@ -41,8 +41,15 @@ function bindEvent(element, eventName, eventHandler) {
     }
 }
 
+// Send a message to the parent
+var sendMessage = function (msg) {
+    // Make sure you are sending a string, and to stringify JSON
+    window.parent.postMessage(msg, '*');
+};
+
 // Listen to messages from parent window
 bindEvent(window, 'message', function (e) {
+    console.log(e, ' this is e from TicTacToe app.js iframe');
     if (e.data.email) $('#nameNew').val(e.data.email);
 });
 
