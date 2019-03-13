@@ -155,7 +155,7 @@ socket.on("gameEnded", function(data) {
     if (user.games.length > 0 && user.games.map(game => game.title).includes('Tic-Tac-Toe')) {
         user.games.map((game, index) => {
             if (game.title === 'Tic-Tac-Toe') {
-                games[index] = gameIngo
+                user.games[index] = gameInfo
             }
         });
     } else {
