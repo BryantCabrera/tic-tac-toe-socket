@@ -30,7 +30,9 @@ const renderLookUp = {
     'null': '/imgs/classroom.png'
 };
 
-// $("#new-game").hide();
+if (!user) {
+    $("#new-game").hide();
+}
 
 // addEventListener support for IE8
 function bindEvent(element, eventName, eventHandler) {
