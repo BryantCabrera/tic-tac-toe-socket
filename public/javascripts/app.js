@@ -63,7 +63,7 @@ bindEvent(window, 'message', function (e) {
         $('#nameNew').val(data.email).prop('disabled', true);
         $("#nameJoin").val(data.email).prop('disabled', true);
     }
-    $("#new-game").hide();
+    // $("#new-game").hide();
 });
 
 // get our connection to the socket.io server
