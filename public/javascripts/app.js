@@ -132,37 +132,39 @@ socket.on('err', function (data) {
 
 // If game has ended, display New Game button.
 socket.on("gameEnded", function(data) {
-    let userWins = user.games.length > 0 && user.games.map(game => game.title).includes('Tic-Tac-Toe') ? user.games.filter(game => game.title === 'Tic-Tac-Toe')[0].wins : 0;
-    let userLosses = user.games.length > 0 && user.games.map(game => game.title).includes('Tic-Tac-Toe') ? user.games.filter(game => game.title === 'Tic-Tac-Toe')[0].losses : 0;
-    let userDraws = user.games.length > 0 && user.games.map(game => game.title).includes('Tic-Tac-Toe') ? user.games.filter(game => game.title === 'Tic-Tac-Toe')[0].draws : 0;
+    if (user) {
+        let userWins = user.games.length > 0 && user.games.map(game => game.title).includes('Tic-Tac-Toe') ? user.games.filter(game => game.title === 'Tic-Tac-Toe')[0].wins : 0;
+        let userLosses = user.games.length > 0 && user.games.map(game => game.title).includes('Tic-Tac-Toe') ? user.games.filter(game => game.title === 'Tic-Tac-Toe')[0].losses : 0;
+        let userDraws = user.games.length > 0 && user.games.map(game => game.title).includes('Tic-Tac-Toe') ? user.games.filter(game => game.title === 'Tic-Tac-Toe')[0].draws : 0;
+   
 
-    if (game.winner === 0) {
-        userDraws++;
-    } else if (player.type === game.winner) {
-        userWins++;
-    } else {
-        userLosses++;
+        if (game.winner === 0) {
+            userDraws++;
+        } else if (player.type === game.winner) {
+            userWins++;
+        } else {
+            userLosses++;
+        }
+
+        gameInfo = {
+            title: 'Tic-Tac-Toe',
+            author: 'Bryant Cabrera',
+            wins: userWins,
+            losses: userLosses,
+            draws: userDraws
+        }
+
+        if (user.games.length > 0 && user.games.map(game => game.title).includes('Tic-Tac-Toe')) {
+            user.games.map((game, index) => {
+                if (game.title === 'Tic-Tac-Toe') {
+                    user.games[index] = gameInfo
+                }
+            });
+        } else {
+            user.games.push(gameInfo);
+        }
+        sendMessage(user);
     }
-
-    gameInfo = {
-        title: 'Tic-Tac-Toe',
-        author: 'Bryant Cabrera',
-        wins: userWins,
-        losses: userLosses,
-        draws: userDraws
-    }
-
-    if (user.games.length > 0 && user.games.map(game => game.title).includes('Tic-Tac-Toe')) {
-        user.games.map((game, index) => {
-            if (game.title === 'Tic-Tac-Toe') {
-                user.games[index] = gameInfo
-            }
-        });
-    } else {
-        user.games.push(gameInfo);
-    }
-    sendMessage(user);
-
     // Displays new game button
     $("#new-game").show();
 });
