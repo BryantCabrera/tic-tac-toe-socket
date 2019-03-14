@@ -220,6 +220,11 @@ section a:active {
     border: 1px solid var(--color2);
     color: var(--color4);
 }
+
+#new-game {
+    display: none;
+}
+
 /*-----Footer-----*/
 footer {
     background-color: var(--color2);
