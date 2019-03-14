@@ -221,9 +221,9 @@ section a:active {
     color: var(--color4);
 }
 
-#new-game {
+/* #new-game {
     display: none;
-}
+} */
 
 /*-----Footer-----*/
 footer {
