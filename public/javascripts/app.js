@@ -7,14 +7,6 @@ gameboard.addEventListener('mousemove', e => {
     root.style.setProperty('--x', (e.clientX - 15) + 'px');
     root.style.setProperty('--y', (e.clientY - 15) + 'px');
 });
-//jQuery version
-// const root = $('document.documentElement');
-
-// $('#gameboard').on('mousemove', e => {
-//     root.css('--x', (e.clientX - 15) + 'px');
-//     root.css('--y', (e.clientY -15) + 'px');
-// });
-
 
 //jQuery section
 let board, turn, winner, user, player, roomID, message, idx;
@@ -30,7 +22,6 @@ const renderLookUp = {
     'null': '/imgs/classroom.png'
 };
 
-
 // addEventListener support for IE8
 function bindEvent(element, eventName, eventHandler) {
     if (element.addEventListener) {
@@ -40,7 +31,7 @@ function bindEvent(element, eventName, eventHandler) {
     }
 }
 
-// Send a message to the parent
+// Sends a message to the parent
 const sendMessage = function (msg) {
     // Make sure you are sending a string, and to stringify JSON
     window.parent.postMessage(msg, '*');
@@ -53,11 +44,9 @@ bindEvent(window, 'message', function (e) {
 
     // parses data into JSON
     const data = JSON.parse(e.data);
+
     //sets global user to parsed data
     user = data;
-    // console.log(user, ' this is user from TTT app.js.');
-
-    // console.log(data, ' this is parsed data from Tic Tac Toe app.js');
 
     if (data.email) {
         $('#nameNew').val(data.email).prop('disabled', true);
@@ -81,10 +70,6 @@ socket.on('new-game', function(data) {
 
 // listen to the server for the `move` event
 socket.on('move', function ({ previousPlayer, idx, currentTurn }) {
-    // console.log(
-    //   `${previousPlayer} clicked on square #${idx}. It is now ${turn}'s turn.`
-    // );
-    
     game.board[idx] = previousPlayer;
 
     game.turn *= -1;
@@ -132,7 +117,7 @@ socket.on('err', function (data) {
 
 // If game has ended, display New Game button.
 socket.on("gameEnded", function(data) {
-    if (user) {
+    if (user._id) {
         let userWins = user.games.length > 0 && user.games.map(game => game.title).includes('Tic-Tac-Toe') ? user.games.filter(game => game.title === 'Tic-Tac-Toe')[0].wins : 0;
         let userLosses = user.games.length > 0 && user.games.map(game => game.title).includes('Tic-Tac-Toe') ? user.games.filter(game => game.title === 'Tic-Tac-Toe')[0].losses : 0;
         let userDraws = user.games.length > 0 && user.games.map(game => game.title).includes('Tic-Tac-Toe') ? user.games.filter(game => game.title === 'Tic-Tac-Toe')[0].draws : 0;
@@ -168,29 +153,6 @@ socket.on("gameEnded", function(data) {
     // Displays new game button
     $("#new-game").show();
 });
-
-// // Opponent played his turn. Update UI.
-// // Allow the current player to play now. 
-// socket.on('turnPlayed', function (data) {
-//     const row = data.tile.split('_')[1][0];
-//     const col = data.tile.split('_')[1][1];
-//     const opponentType = player.getPlayerType() == P1 ? P2 : P1;
-//     game.updateBoard(opponentType, row, col, data.tile);
-//     player.setCurrentTurn(true);
-// });
-
-// // If the other player wins or game is tied, this event is received. 
-// // Notify the user about either scenario and end the game.
-// socket.on('gameEnd', function (data) {
-//     game.endGame(data.message);
-//     socket.leave(data.room);
-// })
-
-// // End the game on any err event. 
-// socket.on('err', function (data) {
-//     game.endGame(data.message);
-// });
-
 
 //Player class
 class Player {
@@ -379,43 +341,3 @@ $('#join').on('click', function () {
     socket.emit('joinGame', { name: name, room: roomID });
     player = new Player(name, -1);
 });
-
-
-
-
-
-
-// // Room player assignment
-// // (function () {
-
-// // Types of players
-// const P1 = 1, P2 = -1;
-// const socket = io.connect('http://localhost:3000'),
-//     player,
-//     game;
-
-//Create a new game. Emit newGame event.
-// $('#new').on('click', function () {
-//     console.log(' clicking #new');
-//     const name = $('#nameNew').val();
-//     // if (!name) {
-//     //     alert('Please enter your name.');
-//     //     return;
-//     // }
-//     $('#create-new').hide();
-//     socket.emit('createGame', { name: name });
-//     player = new Player(name, P1);
-// });
-
-// //Join an existing game on the entered roomId. Emit the joinGame event.
-// $('#join').on('click', function () {
-//     const name = $('#nameJoin').val();
-//     const roomID = $('#room').val();
-//     // if (!name || !roomID) {
-//     //     alert('Please enter your name and game ID.');
-//     //     return;
-//     // }
-//     socket.emit('joinGame', { name: name, room: roomID });
-//     player = new Player(name, P2);
-// });
-// // })();
